@@ -14,13 +14,25 @@
     abertRelatorio:  .asciz  "\nRelatório de Registros\n"
 
     menuIns: .asciz "\nInsira novo registro do Produto:\n"
-    menuOpcaoRemocao:	.asciz	"\nMenu de Opcao:\n<1> Remoção por nome\n<2> Remocao por validade\n<3> Sair"
-    menuOpcaoConsultaFinanceira:	.asciz	"\nMenu de Opcao:\n<1> Total de compra\n<2> Total de venda\n<3> Lucro Total \n<4> Capital Perdido\n<5> Sair"
-    menuOpcaoRelatorioRegistros:    .asciz  "\nMenu de Opcao:\n<1> Ordenar por Nome\n<2> Ordenar por data de validade\n<3> Ordenar por quantidade \n<4> Sair"
+    menuOpcaoRemocao:	.asciz	"\nMenu de Opcao:\n<1> Remoção por nome\n<2> Remoção por validade\n<3> Sair\n"
+    menuOpcaoConsultaFinanceira:	.asciz	"\nMenu de Opcao:\n<1> Total de compra\n<2> Total de venda\n<3> Lucro Total\n<4> Capital Perdido\n<5> Sair\n"
+    menuOpcaoRelatorioRegistros:    .asciz  "\nMenu de Opcao:\n<1> Ordenar por Nome\n<2> Ordenar por data de validade\n<3> Ordenar por quantidade\n<4> Sair\n"
 
-    menuOpcao:  .asciz  "\nMenu de Opcao:\n<1> Inserção de Produto\n<2> Remoção de Produtos\n<3> Atualização de Produto\n<4> Consulta de Produto\n<5> Consulta Financeira\n<6> Gravação de Registro\n<7> Carregamento/Recuperação de Registros\n<8> Relatório de Registros\n<0> Sair"
+    menuOpcao:  .asciz  "\nMenu de Opcao:\n<1> Inserção de Produto\n<2> Remoção de Produtos\n<3> Atualização de Produto\n<4> Consulta de Produto\n<5> Consulta Financeira\n<6> Gravação de Registro\n<7> Carregamento/Recuperação de Registros\n<8> Relatório de Registros\n<0> Sair\n"
 
     tipoDado:   .asciz  "%d"
+
+    estoqueAtualMsg: .asciz "\nEstoque Atual:\n"
+    # --- Novas strings e buffers para carregamento
+    arquivoNome:       .asciz  "produtos.txt"
+    modoLeitura:       .asciz  "r"
+    bufferTamanho:     .long   256
+    linhaBuffer:       .space  256           # buffer temporário para ler linha do arquivo
+    fmtString:         .asciz  "Linha carregada: %s\n"
+
+    msgErroArquivo:    .asciz  "Erro ao abrir arquivo produtos.txt\n"
+    msgErroLeitura:    .asciz  "Erro ao ler linha do arquivo\n"
+    msgErroMalloc:     .asciz  "Erro ao alocar memoria\n"
 
 .section .text
 .globl _start
@@ -85,7 +97,7 @@ _consProd:
 _consFin:
     pushl   $abertConsultaFinanceira
     call    printf
-    jmp    _menuconsfin
+    jmp     _menuconsfin
 
 _grava:
     pushl   $abertGravacao
@@ -95,7 +107,71 @@ _grava:
 _carReg:
     pushl   $abertCarregamento
     call    printf
-    jmp     _menucareg
+
+    # imprime mensagem antes do loop
+    pushl   $estoqueAtualMsg
+    call    printf
+
+    # fopen("produtos.txt", "r")
+    pushl   $modoLeitura
+    pushl   $arquivoNome
+    call    fopen
+    addl    $8, %esp
+    test    %eax, %eax
+    je      _erro_arquivo
+
+    movl    %eax, %ebx        # salva FILE* em %ebx
+
+.ler_linha:
+    # fgets(linhaBuffer, 256, FILE*)
+    pushl   %ebx
+    pushl   $256
+    pushl   $linhaBuffer
+    call    fgets
+    addl    $12, %esp
+
+    test    %eax, %eax
+    je      .fim_leitura
+
+    # Verifica se a linha é vazia
+    movb    linhaBuffer, %al
+    cmpb    $10, %al         # '\n'
+    je      .ler_linha
+    cmpb    $0, %al          # '\0'
+    je      .ler_linha
+
+    # imprime a linha lida (apenas a linha, sem prefixo)
+    pushl   $linhaBuffer
+    call    printf
+    addl    $4, %esp
+
+    jmp     .ler_linha
+
+.fim_leitura:
+    # fecha o arquivo
+    pushl   %ebx
+    call    fclose
+    addl    $4, %esp
+
+    jmp     _start
+
+_erro_arquivo:
+    pushl   $msgErroArquivo
+    call    printf
+    addl    $4, %esp
+    jmp     _start
+
+_erro_leitura:
+    pushl   $msgErroLeitura
+    call    printf
+    addl    $4, %esp
+    jmp     _start
+
+_erro_malloc:
+    pushl   $msgErroMalloc
+    call    printf
+    addl    $4, %esp
+    jmp     _start
 
 _relatorio:
     pushl   $abertRelatorio
@@ -206,4 +282,3 @@ _fim:
     addl    $56, %esp
     pushl   $0
     call    exit
-

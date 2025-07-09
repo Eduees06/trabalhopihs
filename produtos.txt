@@ -1,32 +1,39 @@
-Arroz Tio João;A123;0;01/12/2025;Camil Alimentos;100;4.50;6.00
-Detergente Ypê;D456;1;15/03/2026;Ypê Química;200;1.20;2.50
-Sabão em Pó Omo;S789;1;10/10/2025;Unilever;150;7.00;10.00
-Café Pilão;C001;0;20/09/2024;JDE Brasil;80;6.00;8.50
-Esponja Multiuso;E234;2;01/01/2026;Scotch-Brite;300;0.80;1.50
-Arroz Urbano;A321;0;01/12/2025;Urbano Alimentos;90;4.40;5.90
-Leite Integral Italac;L987;0;05/08/2024;Italac;120;3.80;5.20
-Sabonete Dove;S654;3;01/04/2025;Unilever;250;2.20;3.50
-Amaciante Comfort;A432;1;12/02/2026;Unilever;100;4.90;7.00
-Vassoura Noviça;V001;4;10/10/2027;Bettanin;50;9.00;12.00
-Papel Higiênico Neve;P002;3;11/11/2026;Kimberly-Clark;180;2.90;4.50
-Refrigerante Coca-Cola;R003;5;10/12/2024;Coca-Cola Brasil;200;3.50;5.00
-Água Mineral Crystal;A004;5;01/05/2025;Coca-Cola Brasil;300;1.20;2.00
-Pão de Forma Pullman;P005;7;02/07/2024;Bimbo Brasil;130;4.80;6.30
-Frango Congelado Seara;F006;6;30/11/2024;Seara Alimentos;75;10.00;13.00
-Carne Bovina Friboi;C007;8;25/08/2024;JBS;60;25.00;32.00
-Alface Crespa;A008;9;28/06/2024;Hortifruti Vale;90;1.50;2.20
-Ração Golden Fórmula;R009;10;05/12/2025;Premier Pet;40;65.00;85.00
-Desodorante Rexona;D010;11;15/01/2026;Unilever;110;4.90;7.20
-Caderno Universitário;C011;12;20/02/2026;Tilibra;70;7.50;12.00
-Queijo Mussarela Tirol;Q012;13;10/07/2024;Laticínios Tirol;55;18.00;24.00
-Iogurte Nestlé;I013;13;15/07/2024;Nestlé Brasil;100;2.50;3.50
-Azeite Gallo;A014;0;20/10/2026;Gallo Portugal;60;20.00;28.00
-Cloro Gel Qboa;C015;1;01/09/2025;Qboa Produtos;200;3.20;5.00
-Limpador Veja Multiuso;L016;1;03/03/2026;Reckitt Benckiser;150;4.50;6.20
-Peneira Plástica;P017;2;01/12/2026;Plasútil;100;2.00;3.20
-Escova de Dente Colgate;E018;3;01/11/2025;Colgate-Palmolive;180;1.80;2.90
-Papel Sulfite Chamex;P019;12;10/01/2026;International Paper;90;18.00;25.00
-Sorvete Kibon;S020;6;30/09/2024;Unilever;200;5.00;8.00
-Leite Condensado Moça;L021;0;12/12/2025;Nestlé;130;4.20;6.00
-Molho de Tomate Pomarola;M022;0;20/05/2025;Cargill Brasil;170;2.10;3.40
+Arroz Tio João;A123;Alimento;01/12/2025;Camil Alimentos;100;4;6
+Detergente Ypê;D456;Limpeza;15/03/2026;Ypê Química;200;1;2
+Sabão em Pó Omo;S789;Limpeza;10/10/2025;Unilever;150;7;10
+Café Pilão;C001;Alimento;20/09/2024;JDE Brasil;80;6;8
+Esponja Multiuso;E234;Utensílios;01/01/2026;Scotch-Brite;300;0;1
+Arroz Urbano;A321;Alimento;01/12/2025;Urbano Alimentos;90;4;5
+Leite Integral Italac;L987;Alimento;05/08/2024;Italac;120;3;5
+Sabonete Dove;S654;Cosméticos;01/04/2025;Unilever;250;2;3
+Amaciante Comfort;A432;Limpeza;12/02/2026;Unilever;100;4;7
+Vassoura Noviça;V001;Utensílios;10/10/2027;Bettanin;50;9;12
+Papel Higiênico Neve;P002;Higiene;11/11/2026;Kimberly-Clark;180;2;4
+Refrigerante Coca-Cola;R003;Bebidas;10/12/2024;Coca-Cola Brasil;200;3;5
+Água Mineral Crystal;A004;Bebidas;01/05/2025;Coca-Cola Brasil;300;1;2
+Pão de Forma Pullman;P005;Alimento;02/07/2024;Bimbo Brasil;130;4;6
+Frango Congelado Seara;F006;Alimento;30/11/2024;Seara Alimentos;75;10;13
+Carne Bovina Friboi;C007;Alimento;25/08/2024;JBS;60;25;32
+Alface Crespa;A008;Alimento;28/06/2024;Hortifruti Vale;90;1;2
+Ração Golden Fórmula;R009;Pet;05/12/2025;Premier Pet;40;65;85
+Desodorante Rexona;D010;Cosméticos;15/01/2026;Unilever;110;4;7
+Caderno Universitário;C011;Papelaria;20/02/2026;Tilibra;70;7;12
+Queijo Mussarela Tirol;Q012;Alimento;10/07/2024;Laticínios Tirol;55;18;24
+Iogurte Nestlé;I013;Alimento;15/07/2024;Nestlé Brasil;100;2;3
+Azeite Gallo;A014;Alimento;20/10/2026;Gallo Portugal;60;20;28
+Cloro Gel Qboa;C015;Limpeza;01/09/2025;Qboa Produtos;200;3;5
+Limpador Veja Multiuso;L016;Limpeza;03/03/2026;Reckitt Benckiser;150;4;6
+Peneira Plástica;P017;Utensílios;01/12/2026;Plasútil;100;2;3
+Escova de Dente Colgate;E018;Higiene;01/11/2025;Colgate-Palmolive;180;1;2
+Papel Sulfite Chamex;P019;Papelaria;10/01/2026;International Paper;90;18;25
+Sorvete Kibon;S020;Alimento;30/09/2024;Unilever;200;5;8
+Leite Condensado Moça;L021;Alimento;12/12/2025;Nestlé;130;4;6
+Molho de Tomate Pomarola;M022;Alimento;20/05/2025;Cargill Brasil;170;2;3
+Fone de Ouvido JBL;F023;Eletrônicos;15/08/2026;JBL Brasil;100;50;75
+Camiseta Polo;C024;Vestuário;01/07/2025;Fashion Wear;200;20;40
+Chave de Fenda;C025;Ferramentas;10/09/2027;ToolMaster;150;5;12
+Carrinho de Controle Remoto;C026;Brinquedos;20/11/2026;ToyFun;80;35;50
+Adubo Orgânico;A027;Jardinagem;05/03/2025;AgroBrasil;100;8;15
+Cadeira de Escritório;C028;Móveis;15/12/2027;Móveis & Cia;50;120;200
+Termômetro Digital;T029;Saúde;10/01/2026;HealthTech;70;18;30
 
