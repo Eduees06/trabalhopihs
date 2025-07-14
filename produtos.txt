@@ -10,7 +10,7 @@ Amaciante Comfort;A43;Limpeza;12/02/2026;Unilever;100;4;7
 Vassoura Noviça;V00;Utensílios;10/10/2027;Bettanin;50;9;12
 Papel Higiênico Neve;P00;Higiene;11/11/2026;Kimberly-Clark;180;2;4
 Refrigerante Coca-Cola;R00;Bebidas;10/12/2024;Coca-Cola Brasil;200;3;5
-Água Mineral Crystal;A00;Bebidas;01/05/2025;Coca-Cola Brasil;300;1;2
+Agua Mineral Crystal;A00;Bebidas;01/05/2025;Coca-Cola Brasil;300;1;2
 Pão de Forma Pullman;P02;Alimento;02/07/2024;Bimbo Brasil;130;4;6
 Frango Congelado Seara;F00;Alimento;30/11/2024;Seara Alimentos;75;10;13
 Carne Bovina Friboi;C03;Alimento;25/08/2024;JBS;60;25;32
