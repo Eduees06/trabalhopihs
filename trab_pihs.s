@@ -416,7 +416,7 @@ _removProd:
     call printf
     addl $4, %esp
     
-    # Usar fgets ao invés de scanf para ler nome completo
+    # Usar fgets para ler nome completo
     pushl stdin
     pushl $64
     pushl $bufferNome
@@ -494,36 +494,38 @@ remover_produto_por_nome:
     call printf
     addl $8, %esp
 
+
     movl cabeca, %ebx
     movl $0, %ecx       # anterior
 
 .buscar_remover:
-    cmpl $0, %ebx
+    cmpl $0, %ebx       # verifica se atual é NULL
     je .nao_encontrado_remover
 
-    # Debug: mostra o produto atual sendo comparado
-    pushl %ebx
-    pushl $msgDebugCodigoLido
-    call printf
-    addl $8, %esp
+    # Salva %ecx antes da chamada a strcmp (redundante devido ao prólogo/epílogo, mas atende ao seu pedido)
+    pushl %ecx          
 
+    # Compara o nome atual com o nome buscado
     pushl $bufferNome
-    pushl %ebx
+    pushl %ebx      
     call strcmp
     addl $8, %esp
+
+    # Restaura %ecx após a chamada a strcmp
+    popl %ecx           
+
     cmpl $0, %eax
-    je .remover_produto
+    je .remover_produto  # se encontrou, remove
 
     movl %ebx, %ecx     # anterior = atual
     movl 132(%ebx), %ebx # atual = próximo
     jmp .buscar_remover
-
 .remover_produto:
     # Debug: produto encontrado
-    pushl %ebx
-    pushl $msgDebugProdutoValido
-    call printf
-    addl $8, %esp
+    #pushl %ebx
+    #pushl $msgDebugProdutoValido
+    #call printf
+    #addl $8, %esp
 
     # Se é o primeiro da lista
     cmpl $0, %ecx
@@ -692,10 +694,19 @@ _attProd:
     pushl $msgBuscarNome
     call printf
     addl $4, %esp
+    
+    # Limpa buffer antes de ler
+    call limpar_buffer_stdin
+    
+    # USA fgets AO INVÉS DE scanf PARA LER NOME COMPLETO
+    pushl stdin
+    pushl $64
     pushl $bufferNome
-    pushl $tipoString
-    call scanf
-    addl $8, %esp
+    call fgets
+    addl $12, %esp
+    
+    # Remove quebra de linha
+    call remover_quebra_linha
 
     call buscar_produto_por_nome
     cmpl $0, %eax
@@ -741,23 +752,11 @@ buscar_produto_por_nome:
     pushl %ebx
     pushl %ecx
 
-    # Debug: mostra o nome que está sendo buscado
-    pushl $bufferNome
-    pushl $msgDebugNomeLido
-    call printf
-    addl $8, %esp
-
     movl cabeca, %ebx
 
 .buscar_loop:
     cmpl $0, %ebx
     je .nao_encontrado_buscar
-
-    # Debug: mostra o produto atual sendo comparado
-    pushl %ebx
-    pushl $msgDebugCodigoLido
-    call printf
-    addl $8, %esp
 
     # Compara strings
     pushl $bufferNome
@@ -792,10 +791,19 @@ _consProd:
     pushl $msgBuscarNome
     call printf
     addl $4, %esp
+    
+    # Limpa buffer antes de ler
+    call limpar_buffer_stdin
+    
+    # USA fgets AO INVÉS DE scanf PARA LER NOME COMPLETO
+    pushl stdin
+    pushl $64
     pushl $bufferNome
-    pushl $tipoString
-    call scanf
-    addl $8, %esp
+    call fgets
+    addl $12, %esp
+    
+    # Remove quebra de linha
+    call remover_quebra_linha
 
     call buscar_produto_por_nome
     cmpl $0, %eax
@@ -942,6 +950,16 @@ calcular_capital_perdido_func:
     popl %ebx
     popl %ebp
     ret
+
+calcular_total_compra_func:
+    pushl %ebp
+    movl %esp, %ebp
+    pushl %ebx
+    pushl %ecx
+
+    movl $0, %eax       # total
+    movl cabeca, %ebx
+
 .loop_compra:
     cmpl $0, %ebx
     je .fim_compra
@@ -952,16 +970,6 @@ calcular_capital_perdido_func:
 
     movl 132(%ebx), %ebx  # próximo
     jmp .loop_compra
-# Função para calcular total de compra
-
-calcular_total_compra_func:
-    pushl %ebp
-    movl %esp, %ebp
-    pushl %ebx
-    pushl %ecx
-
-    movl $0, %eax       # total
-    movl cabeca, %ebx
 
 .fim_compra:
     popl %ecx
