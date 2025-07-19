@@ -130,6 +130,7 @@ menu_loop:
     call scanf
     addl $8, %esp
 
+    call limpar_buffer_stdin
     movl opcao, %eax
     cmpl $0, %eax
     je _fim
@@ -171,10 +172,13 @@ _insProd:
     pushl $msgNomeProduto
     call printf
     addl $4, %esp
+    pushl stdin
+    pushl $64
     pushl $bufferNome
-    pushl $tipoString
-    call scanf
-    addl $8, %esp
+    call fgets
+    addl $12, %esp
+
+    call remover_quebra_linha
 
     # Copia nome para o produto
     pushl $bufferNome
@@ -1254,3 +1258,6 @@ _fim:
 .fim_liberar:
     pushl $0
     call exit
+
+
+
