@@ -3,7 +3,7 @@ import struct
 def escrever_registro_binario(arquivo_saida, campos):
     """
     campos = [
-        nome, codigo, tipo, dia, mes, ano, fornecedor, quantidade, precoCompra, precoVenda
+        nome, codigo, tipo, validade, fornecedor, quantidade, precoCompra, precoVenda
     ]
     """
     nome, codigo, tipo, validade, fornecedor, quantidade, preco_compra, preco_venda = campos
@@ -17,14 +17,15 @@ def escrever_registro_binario(arquivo_saida, campos):
     tipo_bytes = tipo.encode('utf-8')[:20].ljust(20, b'\0')
     fornecedor_bytes = fornecedor.encode('utf-8')[:20].ljust(20, b'\0')
 
-    # Converte inteiros
+    # Converte valores numéricos
     quantidade = int(quantidade.strip())
-    preco_compra = int(preco_compra.strip())
-    preco_venda = int(preco_venda.strip())
+    preco_compra = float(preco_compra.strip())  # Agora é float
+    preco_venda = float(preco_venda.strip())    # Agora é float
 
-    # Monta struct: strings fixas + 6 inteiros
+    # Monta struct: strings fixas + 3 inteiros + 2 floats
+    # 'f' = float de precisão simples (4 bytes)
     packed = struct.pack(
-        '64s4s20siii20siii',
+        '64s4s20siii20siff',
         nome_bytes,
         codigo_bytes,
         tipo_bytes,

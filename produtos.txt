@@ -1,38 +1,38 @@
-Arroz Tio Joao;A12;Alimento;01/12/2025;Camil Alimentos;100;4;6
-Detergente Ype;D45;Limpeza;15/03/2026;Ype Quimica;200;1;2
-Sabao em Po Omo;S78;Limpeza;10/10/2025;Unilever;150;7;10
-Cafe Pilao;C00;Alimento;20/09/2024;JDE Brasil;80;6;8
-Esponja Multiuso;E23;Utensilios;01/01/2026;Scotch-Brite;300;1;2
-Arroz Urbano;A32;Alimento;01/12/2025;Urbano Alimentos;90;4;5
-Leite Integral Italac;L98;Alimento;05/08/2024;Italac;120;3;5
-Sabonete Dove;S65;Cosmeticos;01/04/2025;Unilever;250;2;3
-Amaciante Comfort;A43;Limpeza;12/02/2026;Unilever;100;4;7
-Vassoura Novica;V00;Utensilios;10/10/2027;Bettanin;50;9;12
-Papel Higienico Neve;P00;Higiene;11/11/2026;Kimberly-Clark;180;2;4
-Refrigerante Coca-Cola;R00;Bebidas;10/12/2024;Coca-Cola Brasil;200;3;5
-Agua Mineral Crystal;A00;Bebidas;01/05/2025;Coca-Cola Brasil;300;1;2
-Pao de Forma Pullman;P02;Alimento;02/07/2024;Bimbo Brasil;130;4;6
-Frango Congelado Seara;F00;Alimento;30/11/2024;Seara Alimentos;75;10;13
-Carne Bovina Friboi;C03;Alimento;25/08/2024;JBS;60;25;32
-Alface Crespa;A03;Alimento;28/06/2024;Hortifruti Vale;90;1;2
-Racao Golden Formula;R01;Pet;05/12/2025;Premier Pet;40;65;85
-Desodorante Rexona;D01;Cosmeticos;15/01/2026;Unilever;110;4;7
-Caderno Universitario;C01;Papelaria;20/02/2026;Tilibra;70;7;12
-Queijo Mussarela Tirol;Q01;Alimento;10/07/2024;Laticinios Tirol;55;18;24
-Iogurte Nestle;I01;Alimento;15/07/2024;Nestle Brasil;100;2;3
-Azeite Gallo;A01;Alimento;20/10/2026;Gallo Portugal;60;20;28
-Cloro Gel Qboa;C04;Limpeza;01/09/2025;Qboa Produtos;200;3;5
-Limpador Veja Multiuso;L01;Limpeza;03/03/2026;Reckitt Benckiser;150;4;6
-Peneira Plastica;P01;Utensilios;01/12/2026;Plasutil;100;2;3
-Escova de Dente Colgate;E01;Higiene;01/11/2025;Colgate-Palmolive;180;1;2
-Papel Sulfite Chamex;P03;Papelaria;10/01/2026;International Paper;90;18;25
-Sorvete Kibon;S02;Alimento;30/09/2024;Unilever;200;5;8
-Leite Condensado Moca;L02;Alimento;12/12/2025;Nestle;130;4;6
-Molho de Tomate Pomarola;M02;Alimento;20/05/2025;Cargill Brasil;170;2;3
-Fone de Ouvido JBL;F02;Eletronicos;15/08/2026;JBL Brasil;100;50;75
-Camiseta Polo;C02;Vestuario;01/07/2025;Fashion Wear;200;20;40
-Chave de Fenda;C05;Ferramentas;10/09/2027;ToolMaster;150;5;12
-Carrinho de Controle Remoto;C06;Brinquedos;20/11/2026;ToyFun;80;35;50
-Adubo Organico;A02;Jardinagem;05/03/2025;AgroBrasil;100;8;15
-Cadeira de Escritorio;C07;Moveis;15/12/2027;Moveis & Cia;50;120;200
-Termometro Digital;T02;Saude;10/01/2026;HealthTech;70;18;30
+Arroz Tio Joao;A12;Alimento;01/12/2025;Camil Alimentos;100;4.50;6.75
+Detergente Ype;D45;Limpeza;15/03/2026;Ype Quimica;200;1.25;2.50
+Sabao em Po Omo;S78;Limpeza;10/10/2025;Unilever;150;7.90;10.50
+Cafe Pilao;C00;Alimento;20/09/2024;JDE Brasil;80;6.75;8.25
+Esponja Multiuso;E23;Utensilios;01/01/2026;Scotch-Brite;300;1.50;2.75
+Arroz Urbano;A32;Alimento;01/12/2025;Urbano Alimentos;90;4.25;5.50
+Leite Integral Italac;L98;Alimento;05/08/2024;Italac;120;3.80;5.20
+Sabonete Dove;S65;Cosmeticos;01/04/2025;Unilever;250;2.30;3.90
+Amaciante Comfort;A43;Limpeza;12/02/2026;Unilever;100;4.60;7.25
+Vassoura Novica;V00;Utensilios;10/10/2027;Bettanin;50;9.50;12.75
+Papel Higienico Neve;P00;Higiene;11/11/2026;Kimberly-Clark;180;2.80;4.50
+Refrigerante Coca-Cola;R00;Bebidas;10/12/2024;Coca-Cola Brasil;200;3.20;5.50
+Agua Mineral Crystal;A00;Bebidas;01/05/2025;Coca-Cola Brasil;300;1.10;2.25
+Pao de Forma Pullman;P02;Alimento;02/07/2024;Bimbo Brasil;130;4.75;6.90
+Frango Congelado Seara;F00;Alimento;30/11/2024;Seara Alimentos;75;10.50;13.75
+Carne Bovina Friboi;C03;Alimento;25/08/2024;JBS;60;25.80;32.50
+Alface Crespa;A03;Alimento;28/06/2024;Hortifruti Vale;90;1.20;2.50
+Racao Golden Formula;R01;Pet;05/12/2025;Premier Pet;40;65.90;85.75
+Desodorante Rexona;D01;Cosmeticos;15/01/2026;Unilever;110;4.40;7.60
+Caderno Universitario;C01;Papelaria;20/02/2026;Tilibra;70;7.50;12.90
+Queijo Mussarela Tirol;Q01;Alimento;10/07/2024;Laticinios Tirol;55;18.75;24.50
+Iogurte Nestle;I01;Alimento;15/07/2024;Nestle Brasil;100;2.30;3.80
+Azeite Gallo;A01;Alimento;20/10/2026;Gallo Portugal;60;20.90;28.50
+Cloro Gel Qboa;C04;Limpeza;01/09/2025;Qboa Produtos;200;3.25;5.75
+Limpador Veja Multiuso;L01;Limpeza;03/03/2026;Reckitt Benckiser;150;4.80;6.50
+Peneira Plastica;P01;Utensilios;01/12/2026;Plasutil;100;2.60;3.90
+Escova de Dente Colgate;E01;Higiene;01/11/2025;Colgate-Palmolive;180;1.75;2.95
+Papel Sulfite Chamex;P03;Papelaria;10/01/2026;International Paper;90;18.50;25.75
+Sorvete Kibon;S02;Alimento;30/09/2024;Unilever;200;5.90;8.25
+Leite Condensado Moca;L02;Alimento;12/12/2025;Nestle;130;4.20;6.80
+Molho de Tomate Pomarola;M02;Alimento;20/05/2025;Cargill Brasil;170;2.40;3.75
+Fone de Ouvido JBL;F02;Eletronicos;15/08/2026;JBL Brasil;100;50.90;75.50
+Camiseta Polo;C02;Vestuario;01/07/2025;Fashion Wear;200;20.75;40.90
+Chave de Fenda;C05;Ferramentas;10/09/2027;ToolMaster;150;5.60;12.50
+Carrinho de Controle Remoto;C06;Brinquedos;20/11/2026;ToyFun;80;35.80;50.25
+Adubo Organico;A02;Jardinagem;05/03/2025;AgroBrasil;100;8.90;15.50
+Cadeira de Escritorio;C07;Moveis;15/12/2027;Moveis & Cia;50;120.75;200.90
+Termometro Digital;T02;Saude;10/01/2026;HealthTech;70;18.50;30.75
