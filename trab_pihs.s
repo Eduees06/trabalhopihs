@@ -47,22 +47,6 @@
     msgDebugImprimindo: .asciz "-> Iniciando impressão\n"
     msgDebugLiberando: .asciz "-> Liberando lista temporária\n"
     msgDebugFinalizado: .asciz "-> Ordenação finalizada\n"
-    msgDebugInicioRelatorio: .asciz "-> DEBUG: Iniciando função relatório\n"
-    msgDebugFimRelatorio: .asciz "-> DEBUG: Fim da função relatório\n"
-    msgDebugAntesCall: .asciz "-> DEBUG: Antes de chamar função de impressão\n"
-    msgDebugDepoisCall: .asciz "-> DEBUG: Depois de chamar função de impressão\n"
-    msgDebugAntesJump: .asciz "-> DEBUG: Antes de voltar ao menu\n"
-    msgDebugInicioImpressao: .asciz "-> DEBUG: Iniciando impressão - função: %s\n"
-    msgDebugFimImpressao: .asciz "-> DEBUG: Fim da impressão - função: %s\n"
-    msgDebugMalloc: .asciz "-> DEBUG: Malloc realizado, ponteiro: %p\n"
-    msgDebugFree: .asciz "-> DEBUG: Free realizado, ponteiro: %p\n"
-    msgDebugTotalProdutos: .asciz "-> DEBUG: Total produtos: %d\n"
-    msgDebugPonteiroAtual: .asciz "-> DEBUG: Produto atual: %p\n"
-
-    # Strings para identificar funções
-    strFuncaoNome: .asciz "imprimir_lista_invertida"
-    strFuncaoValidade: .asciz "imprimir_por_validade_direto"
-    strFuncaoQuantidade: .asciz "imprimir_por_quantidade_direto"
     # Formato para impressão com floats
     fmtProduto: .asciz "\nNome: %s | Codigo: %s | Tipo: %s | Validade: %02d/%02d/%04d | Fornecedor: %s | Quantidade: %d | Compra: %.2f | Venda: %.2f\n"
 
@@ -185,10 +169,6 @@ menu_loop:
 
 # FUNÇÃO DE RELATÓRIO
 relatorio:
-    pushl $msgDebugInicioRelatorio
-    call printf
-    addl $4, %esp
-
     pushl $abertRelatorio
     call printf
     addl $4, %esp
@@ -197,11 +177,6 @@ relatorio:
     movl cabeca, %ebx
     cmpl $0, %ebx
     je .lista_vazia_relatorio
-
-    pushl totalProdutos
-    pushl $msgDebugTotalProdutos
-    call printf
-    addl $8, %esp
 
     # Mostra menu de ordenação
     pushl $menuRelatorio
@@ -222,9 +197,6 @@ relatorio:
     je .relatorio_por_quantidade
     
     # Opção inválida, volta ao menu
-    pushl $msgDebugAntesJump
-    call printf
-    addl $4, %esp
     jmp menu_loop
 
 .relatorio_por_nome:
@@ -232,21 +204,10 @@ relatorio:
     call printf
     addl $4, %esp
     
-    pushl $msgDebugAntesCall
-    call printf
-    addl $4, %esp
-    
-    call imprimir_lista_invertida
-    
-    pushl $msgDebugDepoisCall
-    call printf
-    addl $4, %esp
+    # A lista já está ordenada por nome alfabeticamente
+    call imprimir_lista_atual
     
     pushl $msgDebugFinalizado
-    call printf
-    addl $4, %esp
-    
-    pushl $msgDebugAntesJump
     call printf
     addl $4, %esp
     jmp menu_loop
@@ -256,21 +217,10 @@ relatorio:
     call printf
     addl $4, %esp
     
-    pushl $msgDebugAntesCall
-    call printf
-    addl $4, %esp
-    
+    # NOVA ABORDAGEM: Impressão direta sem lista temporária
     call imprimir_por_validade_direto
     
-    pushl $msgDebugDepoisCall
-    call printf
-    addl $4, %esp
-    
     pushl $msgDebugFinalizado
-    call printf
-    addl $4, %esp
-    
-    pushl $msgDebugAntesJump
     call printf
     addl $4, %esp
     jmp menu_loop
@@ -280,21 +230,10 @@ relatorio:
     call printf
     addl $4, %esp
     
-    pushl $msgDebugAntesCall
-    call printf
-    addl $4, %esp
-    
+    # NOVA ABORDAGEM: Impressão direta sem lista temporária
     call imprimir_por_quantidade_direto
     
-    pushl $msgDebugDepoisCall
-    call printf
-    addl $4, %esp
-    
     pushl $msgDebugFinalizado
-    call printf
-    addl $4, %esp
-    
-    pushl $msgDebugAntesJump
     call printf
     addl $4, %esp
     jmp menu_loop
@@ -303,164 +242,79 @@ relatorio:
     pushl $msgDepCabecaNull
     call printf
     addl $4, %esp
-    
-    pushl $msgDebugAntesJump
-    call printf
-    addl $4, %esp
     jmp menu_loop
 
-# FUNÇÃO PARA IMPRIMIR LISTA INVERTIDA COM DEPURAÇÃO
-imprimir_lista_invertida:
+# FUNÇÃO PARA IMPRIMIR A LISTA ATUAL (ordenada por nome)
+imprimir_lista_atual:
+    pushl %ebp
+    movl %esp, %ebp
     pushl %ebx
-    pushl %esi
-    pushl %edi
-
-    pushl $strFuncaoNome
-    pushl $msgDebugInicioImpressao
-    call printf
-    addl $8, %esp
 
     pushl totalProdutos
     pushl $msgTotalProdutos
     call printf
     addl $8, %esp
 
-    # Verifica se lista está vazia
-    movl cabeca, %ebx
-    cmpl $0, %ebx
-    je .fim_imprimir_invertida
-
-    pushl %ebx
-    pushl $msgDebugPonteiroAtual
-    call printf
-    addl $8, %esp
-
-    # Cria array de ponteiros
-    movl totalProdutos, %eax
-    imull $4, %eax
-    
-    pushl %eax
-    pushl $msgDebugMalloc
-    call printf
-    addl $8, %esp
-    
-    movl totalProdutos, %eax
-    imull $4, %eax
-    pushl %eax
-    call malloc
-    addl $4, %esp
-    
-    cmpl $0, %eax
-    je .erro_malloc_invertida
-    movl %eax, %edi
-
-    pushl %edi
-    pushl $msgDebugMalloc
-    call printf
-    addl $8, %esp
-
-    # Preenche array
-    movl $0, %esi
     movl cabeca, %ebx
 
-.preencher_array_invertida:
+.loop_imprimir_atual:
     cmpl $0, %ebx
-    je .imprimir_array_invertida
-    
-    movl %ebx, (%edi,%esi,4)
-    incl %esi
-    movl 132(%ebx), %ebx
-    jmp .preencher_array_invertida
+    je .fim_imprimir_atual
 
-.imprimir_array_invertida:
-    # Imprime do último para o primeiro (invertendo a ordem)
-    movl totalProdutos, %esi
-    decl %esi
-
-.loop_imprimir_invertida:
-    cmpl $0, %esi
-    jl .fim_imprimir_invertida_array
-    
-    movl (%edi,%esi,4), %ebx
-    
     # Imprime produto
-    subl $8, %esp
-    flds 128(%ebx)
+    subl $8, %esp           # espaço para preço venda
+    flds 128(%ebx)          # preço venda (offset 128)
     fstpl (%esp)
-    subl $8, %esp
-    flds 124(%ebx)
+    subl $8, %esp           # espaço para preço compra
+    flds 124(%ebx)          # preço compra (offset 124)
     fstpl (%esp)
-    pushl 120(%ebx)
+    pushl 120(%ebx)         # quantidade (offset 120)
     movl %ebx, %eax
-    addl $100, %eax
+    addl $100, %eax         # fornecedor (offset 100)
     pushl %eax
-    pushl 96(%ebx)
-    pushl 92(%ebx)
-    pushl 88(%ebx)
+    pushl 96(%ebx)          # ano (offset 96)
+    pushl 92(%ebx)          # mês (offset 92)
+    pushl 88(%ebx)          # dia (offset 88)
     movl %ebx, %eax
-    addl $68, %eax
+    addl $68, %eax          # tipo (offset 68)
     pushl %eax
     movl %ebx, %eax
-    addl $64, %eax
+    addl $64, %eax          # código (offset 64)
     pushl %eax
-    pushl %ebx
+    pushl %ebx              # nome (offset 0)
     pushl $fmtProduto
     call printf
-    addl $60, %esp
-    
-    decl %esi
-    jmp .loop_imprimir_invertida
+    addl $60, %esp          # 44 + 16 (2 doubles)
 
-.fim_imprimir_invertida_array:
-    pushl %edi
-    pushl $msgDebugFree
-    call printf
-    addl $8, %esp
-    
-    pushl %edi
-    call free
-    addl $4, %esp
+    movl 132(%ebx), %ebx    # próximo (offset 132)
+    jmp .loop_imprimir_atual
 
-.fim_imprimir_invertida:
-    pushl $strFuncaoNome
-    pushl $msgDebugFimImpressao
-    call printf
-    addl $8, %esp
-
-    popl %edi
-    popl %esi
+.fim_imprimir_atual:
     popl %ebx
+    popl %ebp
     ret
 
-.erro_malloc_invertida:
-    pushl $msgErroMalloc
-    call printf
-    addl $4, %esp
-    popl %edi
-    popl %esi
-    popl %ebx
-    ret
-
-# IMPRESSÃO ORDENADA POR VALIDADE COM DEPURAÇÃO
+# NOVA FUNÇÃO: IMPRESSÃO ORDENADA POR VALIDADE SEM LISTA TEMPORÁRIA - VERSÃO ULTRA SEGURA
 imprimir_por_validade_direto:
+    pushl %ebp
+    movl %esp, %ebp
     pushl %ebx
     pushl %esi
     pushl %edi
 
-    pushl $strFuncaoValidade
-    pushl $msgDebugInicioImpressao
-    call printf
-    addl $8, %esp
+    # Verifica se há produtos para imprimir
+    movl totalProdutos, %eax
+    cmpl $0, %eax
+    je .sem_produtos_val
 
     pushl totalProdutos
     pushl $msgTotalProdutos
     call printf
     addl $8, %esp
 
-    # Verifica se lista está vazia
-    movl cabeca, %ebx
-    cmpl $0, %ebx
-    je .fim_imprimir_val
+    # Se há apenas 1 produto, imprime diretamente
+    cmpl $1, %eax
+    je .imprimir_unico_val
 
     # Cria array de ponteiros para os produtos
     movl totalProdutos, %eax
@@ -470,13 +324,8 @@ imprimir_por_validade_direto:
     addl $4, %esp
     
     cmpl $0, %eax
-    je .erro_malloc_array_val
+    je .erro_malloc_array
     movl %eax, %edi         # array de ponteiros
-
-    pushl %edi
-    pushl $msgDebugMalloc
-    call printf
-    addl $8, %esp
 
     # Preenche array com ponteiros dos produtos
     movl $0, %esi           # índice
@@ -484,61 +333,71 @@ imprimir_por_validade_direto:
 
 .preencher_array_val:
     cmpl $0, %ebx
-    je .ordenar_array_val
+    je .verificar_array_val
+    
+    # Verifica se não passou do limite do array
+    cmpl totalProdutos, %esi
+    jge .verificar_array_val
     
     movl %ebx, (%edi,%esi,4)    # array[i] = produto
     incl %esi
     movl 132(%ebx), %ebx        # próximo
     jmp .preencher_array_val
 
-.ordenar_array_val:
-    # Bubble sort por data de validade
-    movl totalProdutos, %ecx
-    decl %ecx                   # n-1 iterações
+.verificar_array_val:
+    # Verifica se preencheu todos os elementos esperados
+    cmpl totalProdutos, %esi
+    jne .erro_preenchimento_val
 
-.loop_externo_val:
-    cmpl $0, %ecx
-    jle .imprimir_array_val
-    
-    movl $0, %esi               # índice interno
-    pushl %ecx                  # salva contador externo
+    # Ordenação por seleção (mais segura que bubble sort)
+    movl $0, %esi               # i = 0
 
-.loop_interno_val:
-    cmpl %ecx, %esi
-    jge .fim_loop_interno_val
+.loop_selecao_externo_val:
+    movl totalProdutos, %eax
+    decl %eax                   # n-1
+    cmpl %eax, %esi
+    jge .imprimir_array_val
     
-    # Compara array[i] com array[i+1]
-    movl (%edi,%esi,4), %eax    # produto i
-    movl 4(%edi,%esi,4), %ebx   # produto i+1
+    movl %esi, %ecx             # min_idx = i
+    movl %esi, %ebx
+    incl %ebx                   # j = i+1
+
+.loop_selecao_interno_val:
+    cmpl totalProdutos, %ebx
+    jge .trocar_se_necessario_val
     
-    # Verifica se ponteiros são válidos
-    cmpl $0, %eax
-    je .proximo_interno_val
-    cmpl $0, %ebx
-    je .proximo_interno_val
+    # Compara array[j] com array[min_idx]
+    movl (%edi,%ebx,4), %eax    # produto j
+    movl (%edi,%ecx,4), %edx    # produto min_idx
     
-    pushl %ebx
+    pushl %edx
     pushl %eax
     call comparar_datas_dois_produtos_simples
     addl $8, %esp
     
     cmpl $0, %eax
-    jle .proximo_interno_val    # se produto i <= produto i+1, não troca
+    jge .proximo_selecao_val    # se produto j >= produto min_idx, continua
     
-    # Troca produtos
+    movl %ebx, %ecx             # min_idx = j
+
+.proximo_selecao_val:
+    incl %ebx
+    jmp .loop_selecao_interno_val
+
+.trocar_se_necessario_val:
+    # Se min_idx != i, troca
+    cmpl %esi, %ecx
+    je .proximo_externo_val
+    
+    # Troca array[i] com array[min_idx]
     movl (%edi,%esi,4), %eax
-    movl 4(%edi,%esi,4), %ebx
+    movl (%edi,%ecx,4), %ebx
     movl %ebx, (%edi,%esi,4)
-    movl %eax, 4(%edi,%esi,4)
+    movl %eax, (%edi,%ecx,4)
 
-.proximo_interno_val:
+.proximo_externo_val:
     incl %esi
-    jmp .loop_interno_val
-
-.fim_loop_interno_val:
-    popl %ecx                   # recupera contador externo
-    decl %ecx
-    jmp .loop_externo_val
+    jmp .loop_selecao_externo_val
 
 .imprimir_array_val:
     # Imprime produtos ordenados
@@ -546,13 +405,13 @@ imprimir_por_validade_direto:
 
 .loop_imprimir_val:
     cmpl totalProdutos, %esi
-    jge .fim_imprimir_val_array
+    jge .fim_imprimir_val
     
     movl (%edi,%esi,4), %ebx    # produto atual
     
     # Verifica se ponteiro é válido
     cmpl $0, %ebx
-    je .proximo_produto_val
+    je .proximo_imprimir_val
     
     # Imprime produto
     subl $8, %esp
@@ -579,61 +438,104 @@ imprimir_por_validade_direto:
     call printf
     addl $60, %esp
 
-.proximo_produto_val:
+.proximo_imprimir_val:
     incl %esi
     jmp .loop_imprimir_val
 
-.fim_imprimir_val_array:
-    pushl %edi
-    pushl $msgDebugFree
-    call printf
-    addl $8, %esp
+.fim_imprimir_val:
+    # VERIFICAÇÃO: Confirma que %edi ainda é válido antes de liberar
+    cmpl $0, %edi
+    je .pular_free_val
     
     # Libera array de ponteiros
     pushl %edi
     call free
     addl $4, %esp
-
-.fim_imprimir_val:
-    pushl $strFuncaoValidade
-    pushl $msgDebugFimImpressao
-    call printf
-    addl $8, %esp
-
+    
+.pular_free_val:
     popl %edi
     popl %esi
     popl %ebx
+    popl %ebp
     ret
 
-.erro_malloc_array_val:
+.imprimir_unico_val:
+    # Imprime o único produto
+    movl cabeca, %ebx
+    subl $8, %esp
+    flds 128(%ebx)
+    fstpl (%esp)
+    subl $8, %esp
+    flds 124(%ebx)
+    fstpl (%esp)
+    pushl 120(%ebx)
+    movl %ebx, %eax
+    addl $100, %eax
+    pushl %eax
+    pushl 96(%ebx)
+    pushl 92(%ebx)
+    pushl 88(%ebx)
+    movl %ebx, %eax
+    addl $68, %eax
+    pushl %eax
+    movl %ebx, %eax
+    addl $64, %eax
+    pushl %eax
+    pushl %ebx
+    pushl $fmtProduto
+    call printf
+    addl $60, %esp
+    popl %edi
+    popl %esi
+    popl %ebx
+    popl %ebp
+    ret
+
+.sem_produtos_val:
+    pushl $msgDepCabecaNull
+    call printf
+    addl $4, %esp
+    popl %edi
+    popl %esi
+    popl %ebx
+    popl %ebp
+    ret
+
+.erro_preenchimento_val:
+    pushl $msgErroMalloc
+    call printf
+    addl $4, %esp
+    pushl %edi
+    call free
+    addl $4, %esp
+    popl %edi
+    popl %esi
+    popl %ebx
+    popl %ebp
+    ret
+
+.erro_malloc_array:
     pushl $msgErroMalloc
     call printf
     addl $4, %esp
     popl %edi
     popl %esi
     popl %ebx
+    popl %ebp
     ret
 
-# IMPRESSÃO ORDENADA POR QUANTIDADE COM DEPURAÇÃO
+# NOVA FUNÇÃO: IMPRESSÃO ORDENADA POR QUANTIDADE SEM LISTA TEMPORÁRIA
 imprimir_por_quantidade_direto:
+    pushl %ebp
+    movl %esp, %ebp
     pushl %ebx
     pushl %esi
     pushl %edi
-
-    pushl $strFuncaoQuantidade
-    pushl $msgDebugInicioImpressao
-    call printf
-    addl $8, %esp
 
     pushl totalProdutos
     pushl $msgTotalProdutos
     call printf
     addl $8, %esp
-
-    # Verifica se lista está vazia
-    movl cabeca, %ebx
-    cmpl $0, %ebx
-    je .fim_imprimir_qtd
 
     # Cria array de ponteiros para os produtos
     movl totalProdutos, %eax
@@ -645,11 +547,6 @@ imprimir_por_quantidade_direto:
     cmpl $0, %eax
     je .erro_malloc_array_qtd
     movl %eax, %edi         # array de ponteiros
-
-    pushl %edi
-    pushl $msgDebugMalloc
-    call printf
-    addl $8, %esp
 
     # Preenche array com ponteiros dos produtos
     movl $0, %esi           # índice
@@ -680,15 +577,15 @@ imprimir_por_quantidade_direto:
     cmpl %ecx, %esi
     jge .fim_loop_interno_qtd
     
+    # VERIFICAÇÃO CRÍTICA: Garante que não acessamos além do array
+    movl %esi, %eax
+    incl %eax                   # próximo índice
+    cmpl totalProdutos, %eax
+    jge .proximo_interno_qtd    # se próximo >= total, pula
+    
     # Compara array[i] com array[i+1]
     movl (%edi,%esi,4), %eax    # produto i
     movl 4(%edi,%esi,4), %ebx   # produto i+1
-    
-    # Verifica se ponteiros são válidos
-    cmpl $0, %eax
-    je .proximo_interno_qtd
-    cmpl $0, %ebx
-    je .proximo_interno_qtd
     
     movl 120(%eax), %eax        # quantidade produto i
     cmpl 120(%ebx), %eax        # compara com quantidade produto i+1
@@ -715,13 +612,9 @@ imprimir_por_quantidade_direto:
 
 .loop_imprimir_qtd:
     cmpl totalProdutos, %esi
-    jge .fim_imprimir_qtd_array
+    jge .fim_imprimir_qtd
     
     movl (%edi,%esi,4), %ebx    # produto atual
-    
-    # Verifica se ponteiro é válido
-    cmpl $0, %ebx
-    je .proximo_produto_qtd
     
     # Imprime produto
     subl $8, %esp
@@ -747,31 +640,25 @@ imprimir_por_quantidade_direto:
     pushl $fmtProduto
     call printf
     addl $60, %esp
-
-.proximo_produto_qtd:
+    
     incl %esi
     jmp .loop_imprimir_qtd
 
-.fim_imprimir_qtd_array:
-    pushl %edi
-    pushl $msgDebugFree
-    call printf
-    addl $8, %esp
+.fim_imprimir_qtd:
+    # VERIFICAÇÃO: Confirma que %edi ainda é válido antes de liberar
+    cmpl $0, %edi
+    je .pular_free_qtd
     
     # Libera array de ponteiros
     pushl %edi
     call free
     addl $4, %esp
-
-.fim_imprimir_qtd:
-    pushl $strFuncaoQuantidade
-    pushl $msgDebugFimImpressao
-    call printf
-    addl $8, %esp
-
+    
+.pular_free_qtd:
     popl %edi
     popl %esi
     popl %ebx
+    popl %ebp
     ret
 
 .erro_malloc_array_qtd:
@@ -781,22 +668,19 @@ imprimir_por_quantidade_direto:
     popl %edi
     popl %esi
     popl %ebx
+    popl %ebp
     ret
 
-# FUNÇÃO AUXILIAR PARA COMPARAR DATAS COM DEPURAÇÃO
+# FUNÇÃO AUXILIAR PARA COMPARAR DATAS (versão simplificada)
 comparar_datas_dois_produtos_simples:
+    pushl %ebp
+    movl %esp, %ebp
     pushl %ebx
     pushl %ecx
     pushl %edx
 
-    movl 16(%esp), %ebx     # produto1 (ajustado para nova pilha)
-    movl 20(%esp), %ecx     # produto2 (ajustado para nova pilha)
-
-    # Verifica se os ponteiros são válidos
-    cmpl $0, %ebx
-    je .produto1_menor_simples
-    cmpl $0, %ecx
-    je .produto1_maior_simples
+    movl 8(%ebp), %ebx      # produto1
+    movl 12(%ebp), %ecx     # produto2
 
     # Compara anos
     movl 96(%ebx), %eax     # ano produto1
@@ -834,6 +718,7 @@ comparar_datas_dois_produtos_simples:
     popl %edx
     popl %ecx
     popl %ebx
+    popl %ebp
     ret
 # FUNÇÃO DE CARREGAMENTO
 carregar:
