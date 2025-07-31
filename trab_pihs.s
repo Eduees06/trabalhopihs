@@ -26,7 +26,7 @@
     totalProdutos: .int 0
     lista_temp: .int 0
     # Data atual para verificação de validade
-    dataAtualDia: .int 15
+    dataAtualDia: .int 31
     dataAtualMes: .int 7
     dataAtualAno: .int 2025
 
@@ -42,11 +42,7 @@
 
     # NOVO: Menu do relatório
     menuRelatorio: .asciz "Escolha o tipo de ordenação:\n<1> Por nome (alfabética)\n<2> Por data de validade\n<3> Por quantidade em estoque\nEscolha: "
-    msgDebugIniciandoOrdenacao: .asciz "-> Iniciando ordenação\n"
-    msgDebugListaCriada: .asciz "-> Lista temporária criada\n"
-    msgDebugImprimindo: .asciz "-> Iniciando impressão\n"
-    msgDebugLiberando: .asciz "-> Liberando lista temporária\n"
-    msgDebugFinalizado: .asciz "-> Ordenação finalizada\n"
+
     # Formato para impressão com floats
     fmtProduto: .asciz "\nNome: %s | Codigo: %s | Tipo: %s | Validade: %02d/%02d/%04d | Fornecedor: %s | Quantidade: %d | Compra: %.2f | Venda: %.2f\n"
 
@@ -104,7 +100,7 @@
     msgNovoPrecoVenda: .asciz "Digite o novo preço de venda: "
     msgProdutoAtualizado: .asciz "Produto atualizado com sucesso!\n"
 
-    # Mensagens para consulta financeira (CORRIGIDAS)
+    # Mensagens para consulta financeira
     msgConsultaFinanceiraMenu: .asciz "Consulta Financeira:\n<1> Total de compra\n<2> Total de venda\n<3> Lucro total\n<4> Capital perdido\nEscolha: "
     msgTotalCompra: .asciz "Total de compra: %.2f\n"
     msgTotalVenda: .asciz "Total de venda: %.2f\n"
@@ -200,42 +196,22 @@ relatorio:
     jmp menu_loop
 
 .relatorio_por_nome:
-    pushl $msgDebugIniciandoOrdenacao
-    call printf
-    addl $4, %esp
     
     # A lista já está ordenada por nome alfabeticamente
     call imprimir_lista_atual
     
-    pushl $msgDebugFinalizado
-    call printf
-    addl $4, %esp
     jmp menu_loop
 
 .relatorio_por_validade:
-    pushl $msgDebugIniciandoOrdenacao
-    call printf
-    addl $4, %esp
     
-    # NOVA ABORDAGEM: Impressão direta sem lista temporária
     call imprimir_por_validade_direto
     
-    pushl $msgDebugFinalizado
-    call printf
-    addl $4, %esp
     jmp menu_loop
 
 .relatorio_por_quantidade:
-    pushl $msgDebugIniciandoOrdenacao
-    call printf
-    addl $4, %esp
     
-    # NOVA ABORDAGEM: Impressão direta sem lista temporária
     call imprimir_por_quantidade_direto
     
-    pushl $msgDebugFinalizado
-    call printf
-    addl $4, %esp
     jmp menu_loop
 
 .lista_vazia_relatorio:
@@ -284,7 +260,7 @@ imprimir_lista_atual:
     pushl %ebx              # nome (offset 0)
     pushl $fmtProduto
     call printf
-    addl $60, %esp          # 44 + 16 (2 doubles)
+    addl $52, %esp          # 36 (args) + 16 (2 doubles) = 52 bytes
 
     movl 132(%ebx), %ebx    # próximo (offset 132)
     jmp .loop_imprimir_atual
@@ -436,7 +412,7 @@ imprimir_por_validade_direto:
     pushl %ebx
     pushl $fmtProduto
     call printf
-    addl $60, %esp
+    addl $52, %esp          # 36 (args) + 16 (2 doubles) = 52 bytes
 
 .proximo_imprimir_val:
     incl %esi
@@ -484,7 +460,7 @@ imprimir_por_validade_direto:
     pushl %ebx
     pushl $fmtProduto
     call printf
-    addl $60, %esp
+    addl $52, %esp          # 36 (args) + 16 (2 doubles) = 52 bytes
     popl %edi
     popl %esi
     popl %ebx
@@ -639,7 +615,7 @@ imprimir_por_quantidade_direto:
     pushl %ebx
     pushl $fmtProduto
     call printf
-    addl $60, %esp
+    addl $52, %esp          # 36 (args) + 16 (2 doubles) = 52 bytes
     
     incl %esi
     jmp .loop_imprimir_qtd
@@ -895,7 +871,7 @@ _consFin:
     fstps tempFloat          # salva total venda
     call calcular_total_compra_func
     flds tempFloat           # carrega total venda
-    fsubp %st, %st(1)        # CORRIGIDO: venda - compra
+    fsubp %st, %st(1)        # venda - compra
     subl $8, %esp
     fstpl (%esp)
     pushl $msgLucroTotal
@@ -912,7 +888,7 @@ _consFin:
     addl $12, %esp
     jmp menu_loop
 
-# FUNÇÕES DE CÁLCULO CORRIGIDAS
+# FUNÇÕES DE CÁLCULO
 calcular_total_compra_func:
     pushl %ebp
     movl %esp, %ebp
@@ -1483,11 +1459,12 @@ remover_produtos_vencidos:
 
     movl $0, %edx       # contador de removidos
 
-.reiniciar_busca_vencidos:
+# ESTRATÉGIA: Percorrer a lista UMA VEZ, removendo conforme encontra
+.loop_buscar_vencidos:
     movl cabeca, %ebx   # atual
     movl $0, %ecx       # anterior
 
-.loop_vencidos:
+.percorrer_lista:
     cmpl $0, %ebx       # verifica se atual é NULL
     je .fim_remover_vencidos
 
@@ -1497,43 +1474,61 @@ remover_produtos_vencidos:
     addl $4, %esp
     
     cmpl $1, %eax       # se produto vencido
-    je .remover_vencido_atual
+    je .remover_este_vencido
 
-    # Produto não vencido, avança
+    # Produto não vencido, avança normalmente
     movl %ebx, %ecx     # anterior = atual
     movl 132(%ebx), %ebx # atual = próximo (offset 132)
-    jmp .loop_vencidos
+    jmp .percorrer_lista
 
-.remover_vencido_atual:
+.remover_este_vencido:
     # Debug: mostra produto vencido
+    pushl %edx          # salva contador
+    pushl %ecx          # salva anterior
     pushl %ebx
     pushl $msgDebugValidadeVencida
     call printf
     addl $8, %esp
+    popl %ecx           # restaura anterior
+    popl %edx           # restaura contador
 
-    movl 132(%ebx), %esi  # salva próximo antes de remover (offset 132)
+    # Salva o próximo ANTES de fazer qualquer alteração
+    movl 132(%ebx), %esi  # próximo do atual (offset 132)
 
-    # Se é o primeiro da lista
+    # Se é o primeiro da lista (anterior == NULL)
     cmpl $0, %ecx
-    je .remover_vencido_primeiro
+    je .remover_vencido_cabeca
 
-    # Remove do meio/final
-    movl %esi, 132(%ecx)  # anterior->próximo = próximo do atual (offset 132)
-    jmp .liberar_vencido
+    # Remove do meio/final da lista
+    movl %esi, 132(%ecx)  # anterior->próximo = próximo do atual
+    jmp .liberar_vencido_memoria
 
-.remover_vencido_primeiro:
-    movl %esi, cabeca     # cabeca = próximo
+.remover_vencido_cabeca:
+    # Remove da cabeça da lista
+    movl %esi, cabeca     # cabeca = próximo do atual
 
-.liberar_vencido:
+.liberar_vencido_memoria:
+    # Libera memória do produto removido
+    pushl %edx          # salva contador
+    pushl %ecx          # salva anterior  
+    pushl %esi          # salva próximo
     pushl %ebx
     call free
     addl $4, %esp
+    popl %esi           # restaura próximo
+    popl %ecx           # restaura anterior
+    popl %edx           # restaura contador
     
+    # Atualiza contadores
     decl totalProdutos
     incl %edx           # incrementa contador de removidos
     
-    # Reinicia a busca do início para evitar problemas
-    jmp .reiniciar_busca_vencidos
+    # IMPORTANTE: Continua a partir do próximo, sem alterar 'anterior'
+    # porque o nó atual foi removido
+    movl %esi, %ebx     # atual = próximo (que foi salvo)
+    # NÃO atualiza %ecx (anterior permanece o mesmo)
+    
+    jmp .percorrer_lista
 
 .fim_remover_vencidos:
     # Mostra quantos produtos foram removidos
@@ -1701,7 +1696,7 @@ _consProd:
     pushl %edi              # nome (offset 0)
     pushl $fmtProduto
     call printf
-    addl $60, %esp          # 44 + 16 (2 doubles)
+    addl $52, %esp          # 36 (args) + 16 (2 doubles) = 52 bytes
 
     jmp menu_loop
 
@@ -1833,3 +1828,5 @@ _fim:
 .fim_liberar:
     pushl $0
     call exit
+
+    
